@@ -60,8 +60,13 @@ namespace MyGame
                 _size = value;
             }
         }
-        public UIElement UiContainer { get; private set; }
+        public UIElement UiContainer { get; protected set; }
         public TTable GameTable { get; private set; }
+
+        internal virtual void Destroy()
+        {
+            GameTable.RemoveItem(this);
+        }
 
         /// <summary>
         /// This method will fire when the game table items draw event is fired
@@ -83,12 +88,16 @@ namespace MyGame
                 //Hopefuly this reduces the number of draws required
                 if (_Changed)
                 {
-                    Canvas.SetLeft(UiContainer, Position.X);
-                    Canvas.SetTop(UiContainer, Position.Y);
-                    this.UiContainer.RenderSize = this.Size;
+                    if (UiContainer != null)
+                    {
+                        Canvas.SetLeft(UiContainer, Position.X);
+                        Canvas.SetTop(UiContainer, Position.Y);
+                        this.UiContainer.RenderSize = this.Size;
 
-                    //set the switch back to false
-                    _Changed = false;
+                        //set the switch back to false
+                        _Changed = false;
+                    }
+                    
                 }
             }
         }

@@ -13,7 +13,7 @@ namespace MyGame
 {
     public class GameTable
     {
-        public GameTable(Point position, Size size, UIElement uiContainer)
+        public GameTable(Point position, Size size, Canvas uiContainer)
         {
             this.Size = size;
             this.Position = position;
@@ -79,12 +79,17 @@ namespace MyGame
                 _changed = true;
             }
         }
-        public UIElement UiContainer { get; private set; }
+        public Canvas UiContainer { get; private set; }
         public float FPS { get; private set; }
 
 
         internal Dictionary<Guid, dynamic> _Items = new Dictionary<Guid, dynamic>();
         //Events
+
+        public virtual void ClearItems()
+        {
+            _Items.Clear();
+        }
 
         /// <summary>
         /// This event will be fired before the table drawing begins
@@ -137,6 +142,7 @@ namespace MyGame
             where TTable : GameTable
         {
             _Items.Remove(item.Id);
+            UiContainer.Children.Remove(item.UiContainer);
         }
     }
 }
